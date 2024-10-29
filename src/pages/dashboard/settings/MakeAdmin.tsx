@@ -1,8 +1,8 @@
 import { BsTrash } from 'react-icons/bs';
 import { Button, ConfigProvider, Flex, Form, Input, Popconfirm, Table } from 'antd';
-import { dummyData } from '../../constant/constant';
-import CustomModal from '../../components/shared/CustomModal';
 import { useState } from 'react';
+import CustomModal from '../../../components/shared/CustomModal';
+import { dummyData } from '../../../constant/constant';
 
 const MakeAdmin = () => {
     const [makeAdminModal, setMakeAdminModal] = useState(false);

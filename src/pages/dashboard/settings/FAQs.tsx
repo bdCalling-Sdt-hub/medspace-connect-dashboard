@@ -1,14 +1,13 @@
 import { Button, Flex } from 'antd';
 import { useState } from 'react';
 
-import CustomModal from '../../components/shared/CustomModal';
-import AddFaqForm from '../../components/ui/form/AddFaqForm';
-import EditFaqForm from '../../components/ui/form/EditFaqForm';
-import { faqData } from '../../const';
-
 import { GoQuestion } from 'react-icons/go';
 import { CiEdit } from 'react-icons/ci';
 import { RxCross2 } from 'react-icons/rx';
+import { faqData } from '../../../const';
+import CustomModal from '../../../components/shared/CustomModal';
+import AddFaqForm from '../../../components/ui/form/AddFaqForm';
+import EditFaqForm from '../../../components/ui/form/EditFaqForm';
 
 const FAQs = () => {
     const [openModal, setOpenModal] = useState(false);
@@ -23,11 +22,6 @@ const FAQs = () => {
         // Logic for editing the FAQ
         console.log(`Edit FAQ at index: ${index}`);
     };
-
-    // const handleDelete = (index: number) => {
-    //     // Logic for deleting the FAQ
-    //     console.log(`Delete FAQ at index: ${index}`);
-    // };
     return (
         <div>
             <Flex vertical={false} gap={10} align="center" justify="space-between">

@@ -1,16 +1,26 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 import Dashboard from '../pages/dashboard/dashboard/Dashboard';
-import MakeAdmin from '../pages/dashboard/MakeAdmin';
 import Login from '../pages/authentication/Login';
 import ErrorPage from '../pages/error/ErrorPage';
-import TermsCondition from '../pages/dashboard/TermsCondition';
-import FAQs from '../pages/dashboard/FAQs';
+import TermsCondition from '../pages/dashboard/settings/TermsCondition';
+
 import Notification from '../pages/dashboard/Notification';
 import ForgetPassword from '../pages/authentication/ForgetPassword';
 import VerifyOtp from '../pages/authentication/VerifyOtp';
 import NewPassword from '../pages/authentication/NewPassword';
 import Profile from '../pages/dashboard/profile/Profile';
+import MakeAdmin from '../pages/dashboard/settings/MakeAdmin';
+import FAQs from '../pages/dashboard/settings/FAQs';
+import SubscriptionPackages from '../pages/dashboard/settings/SubscriptionPackages';
+import UserAgreement from '../pages/dashboard/settings/UserAgreement';
+import About from '../pages/dashboard/settings/About';
+import Support from '../pages/dashboard/settings/Support';
+import SpaceProvider from '../pages/dashboard/SpaceProvider';
+import SpaceSeeker from '../pages/dashboard/SpaceSeeker';
+import SpacePosts from '../pages/dashboard/SpacePosts';
+import SubscribedUsers from '../pages/dashboard/SubscribedUsers';
+import DealingDetails from '../pages/dashboard/DealingDetails';
 
 const router = createBrowserRouter([
     {
@@ -19,18 +29,28 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             { path: '', element: <Dashboard /> },
-            // { path: 'brands', element: <Brands /> },
-            // { path: 'influencer', element: <Influencer /> },
-            // { path: 'categories', element: <Categories /> },
-            // { path: 'reviews', element: <Review /> },
-            // { path: 'campaign', element: <Campaign /> },
+            { path: 'space-provider', element: <SpaceProvider /> },
+            { path: 'space-seeker', element: <SpaceSeeker /> },
+            { path: 'space-post', element: <SpacePosts /> },
+            { path: 'subscribed-users', element: <SubscribedUsers /> },
+            { path: 'dealing-details', element: <DealingDetails /> },
+
+            //    for settings section
+            { path: 'subscriptions', element: <SubscriptionPackages /> },
             { path: 'make-admin', element: <MakeAdmin /> },
             { path: 'terms', element: <TermsCondition /> },
+            { path: 'agreement', element: <UserAgreement /> },
+            { path: 'about', element: <About /> },
+            { path: 'support', element: <Support /> },
             { path: 'faqs', element: <FAQs /> },
-            { path: 'notification', element: <Notification /> },
+
+            // others sections
             { path: 'profile', element: <Profile /> },
+            { path: 'notification', element: <Notification /> },
         ],
     },
+
+    // ? for authentication sections
     { path: '/login', element: <Login /> },
     { path: '/forget-password', element: <ForgetPassword /> },
     { path: '/verify-otp', element: <VerifyOtp /> },

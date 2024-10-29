@@ -5,20 +5,20 @@ const DashboardStats = () => {
         {
             name: 'Total Brands',
             count: '20.10K',
-            icon: <HiMiniUserGroup color="#DBB162" size={24} />,
+            icon: <HiMiniUserGroup color="#0A8FDC" size={24} />,
             bgColor: '#fff',
         },
         {
             name: 'Total Campaigns',
             count: '920',
-            icon: <HiCalendar color="#DBB162" size={24} />,
+            icon: <HiCalendar color="#0A8FDC" size={24} />,
 
             bgColor: '#fff',
         },
         {
             name: 'Total Revenue',
             count: '150.10K',
-            icon: <HiCurrencyDollar color="#DBB162" size={24} />,
+            icon: <HiCurrencyDollar color="#0A8FDC" size={24} />,
 
             bgColor: '#fff',
         },

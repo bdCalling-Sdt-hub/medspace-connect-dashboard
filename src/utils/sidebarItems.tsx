@@ -21,7 +21,7 @@ const sidebarItems: TSidebarItem[] = [
         icon: <IoBarChartOutline size={24} />,
     },
     {
-        key: '2',
+        key: '2e',
         label: 'Space Provider',
         path: 'space-provider',
         icon: <LuUser size={24} />,
@@ -33,7 +33,7 @@ const sidebarItems: TSidebarItem[] = [
         icon: <LuUser size={24} />,
     },
     {
-        key: '11',
+        key: '111434',
         label: 'Space Post',
         path: 'space-post',
         icon: <MdOutlineBedroomParent size={24} />,
@@ -41,7 +41,7 @@ const sidebarItems: TSidebarItem[] = [
     {
         key: '11',
         label: 'Subscribed User',
-        path: 'subscribed-user',
+        path: 'subscribed-users',
         icon: <RiUserStarLine size={24} />,
     },
     {
@@ -69,13 +69,13 @@ const sidebarItems: TSidebarItem[] = [
                 icon: <BsPersonGear size={24} />,
             },
             {
-                key: '4',
+                key: '42',
                 label: 'Terms & Conditions',
                 path: 'terms',
                 icon: <GrDocumentTxt size={24} />,
             },
             {
-                key: '4',
+                key: '41',
                 label: 'User Agreement',
                 path: 'agreement',
                 icon: <GrDocumentTxt size={24} />,
@@ -87,7 +87,7 @@ const sidebarItems: TSidebarItem[] = [
                 icon: <AiOutlineFileText size={24} />,
             },
             {
-                key: '44',
+                key: '442',
                 label: 'Support',
                 path: 'support',
                 icon: <BiSupport size={24} />,

@@ -10,17 +10,18 @@ const UserChart = () => {
     }
 
     const data: UserData[] = [
-        { month: 'February', spaceProvider: 80, spaceSeeker: 40, newUsers: 30 },
-        { month: 'March', spaceProvider: 130, spaceSeeker: 70, newUsers: 45 },
-        { month: 'April', spaceProvider: 90, spaceSeeker: 60, newUsers: 40 },
+        { month: 'Jan', spaceProvider: 30, spaceSeeker: 10, newUsers: 20 },
+        { month: 'Feb', spaceProvider: 80, spaceSeeker: 40, newUsers: 30 },
+        { month: 'Mar', spaceProvider: 130, spaceSeeker: 70, newUsers: 45 },
+        { month: 'Apr', spaceProvider: 90, spaceSeeker: 60, newUsers: 40 },
         { month: 'May', spaceProvider: 140, spaceSeeker: 80, newUsers: 50 },
-        { month: 'June', spaceProvider: 110, spaceSeeker: 70, newUsers: 35 },
-        { month: 'July', spaceProvider: 180, spaceSeeker: 120, newUsers: 70 },
-        { month: 'August', spaceProvider: 150, spaceSeeker: 100, newUsers: 60 },
-        { month: 'September', spaceProvider: 170, spaceSeeker: 100, newUsers: 80 },
-        { month: 'October', spaceProvider: 190, spaceSeeker: 130, newUsers: 90 },
-        { month: 'November', spaceProvider: 160, spaceSeeker: 120, newUsers: 75 },
-        { month: 'December', spaceProvider: 200, spaceSeeker: 150, newUsers: 100 },
+        { month: 'Jun', spaceProvider: 110, spaceSeeker: 70, newUsers: 35 },
+        { month: 'Jul', spaceProvider: 180, spaceSeeker: 120, newUsers: 70 },
+        { month: 'Aug', spaceProvider: 150, spaceSeeker: 100, newUsers: 60 },
+        { month: 'Sep', spaceProvider: 170, spaceSeeker: 100, newUsers: 80 },
+        { month: 'Oct', spaceProvider: 190, spaceSeeker: 130, newUsers: 90 },
+        { month: 'Nov', spaceProvider: 160, spaceSeeker: 120, newUsers: 75 },
+        { month: 'Dec', spaceProvider: 200, spaceSeeker: 150, newUsers: 100 },
     ];
 
     return (

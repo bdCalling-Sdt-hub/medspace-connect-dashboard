@@ -12,6 +12,9 @@ function App() {
                         Input: {
                             borderRadius: 40,
                         },
+                        Select: {
+                            borderRadius: 40,
+                        },
                     },
                 }}
             >

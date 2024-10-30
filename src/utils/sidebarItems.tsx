@@ -1,17 +1,14 @@
 import { TSidebarItem } from './generateSidebarItems';
-
 import { AiOutlineFileText, AiOutlineQuestionCircle } from 'react-icons/ai';
-import { IoBarChartOutline } from 'react-icons/io5';
-
+import { IoBarChartOutline, IoDocumentTextOutline } from 'react-icons/io5';
 import { BsPersonGear } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
-import { LuUser } from 'react-icons/lu';
+import { LuScrollText, LuUser } from 'react-icons/lu';
 import { PiListMagnifyingGlassThin } from 'react-icons/pi';
 import { MdOutlineBedroomParent } from 'react-icons/md';
 import { TfiWallet } from 'react-icons/tfi';
 import { RiUserStarLine } from 'react-icons/ri';
 import { GoGear } from 'react-icons/go';
-import { GrDocumentTxt } from 'react-icons/gr';
 import { BiSupport } from 'react-icons/bi';
 const sidebarItems: TSidebarItem[] = [
     {
@@ -72,13 +69,13 @@ const sidebarItems: TSidebarItem[] = [
                 key: '42',
                 label: 'Terms & Conditions',
                 path: 'terms',
-                icon: <GrDocumentTxt size={24} />,
+                icon: <IoDocumentTextOutline size={24} />,
             },
             {
                 key: '41',
                 label: 'User Agreement',
                 path: 'agreement',
-                icon: <GrDocumentTxt size={24} />,
+                icon: <LuScrollText size={24} />,
             },
             {
                 key: '44',

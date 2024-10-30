@@ -24,11 +24,7 @@ const MakeAdmin = () => {
             dataIndex: 'email',
             key: 'email',
         },
-        {
-            title: 'Admin Type',
-            dataIndex: 'admin_type',
-            key: 'admin_type',
-        },
+
         {
             title: 'Action',
             dataIndex: 'action',
@@ -120,17 +116,7 @@ const MakeAdmin = () => {
                 </div>
             </Flex>
 
-            <ConfigProvider
-            // theme={{
-            //     components: {
-            //         Table: {
-            //             headerBg: '#E9EFFA',
-            //             headerBorderRadius: 0,
-            //             rowHoverBg: '#F5F5F5',
-            //         },
-            //     },
-            // }}
-            >
+            <ConfigProvider>
                 <Table columns={columns} dataSource={dummyData} />
             </ConfigProvider>
 

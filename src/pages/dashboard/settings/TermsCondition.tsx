@@ -8,25 +8,17 @@ const TermsCondition = () => {
 
     const config = {
         readonly: false,
-        placeholder: 'Start typings...',
+        placeholder: 'Start typing...',
         style: {
-            height: 400,
+            height: '400px',
             background: 'white',
         },
     };
+
     return (
-        <div className=" bg-white px-4 py-2 rounded-lg pb-10 ">
-            <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    margin: '16px 0',
-                }}
-            >
-                <div>
-                    <h3 className="text-3xl text-primary font-semibold">Terms and Conditions</h3>
-                </div>
+        <div className="bg-white px-4 py-6 rounded-lg shadow-md">
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-3xl text-primary font-semibold">Terms and Conditions</h3>
             </div>
             <div>
                 <JoditEditor
@@ -37,14 +29,7 @@ const TermsCondition = () => {
                     onChange={() => {}}
                 />
             </div>
-            <div
-                style={{
-                    marginTop: 24,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
+            <div className="mt-6 flex justify-center">
                 <Button
                     style={{
                         height: 40,

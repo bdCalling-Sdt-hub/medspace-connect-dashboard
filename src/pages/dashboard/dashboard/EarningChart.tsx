@@ -2,18 +2,18 @@ import { Select } from 'antd';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 const { Option } = Select;
 const data = [
-    { name: 'Jan', earnings: 8000 },
-    { name: 'Feb', earnings: 12000 },
-    { name: 'Mar', earnings: 10000 },
-    { name: 'Apr', earnings: 22314 },
-    { name: 'May', earnings: 16000 },
-    { name: 'Jun', earnings: 15000 },
-    { name: 'Jul', earnings: 11000 },
-    { name: 'Aug', earnings: 17000 },
-    { name: 'Sep', earnings: 9000 },
-    { name: 'Oct', earnings: 15000 },
-    { name: 'Nov', earnings: 14000 },
-    { name: 'Dec', earnings: 17000 },
+    { name: 'Jan', deals: 8000 },
+    { name: 'Feb', deals: 12000 },
+    { name: 'Mar', deals: 10000 },
+    { name: 'Apr', deals: 22314 },
+    { name: 'May', deals: 16000 },
+    { name: 'Jun', deals: 15000 },
+    { name: 'Jul', deals: 11000 },
+    { name: 'Aug', deals: 17000 },
+    { name: 'Sep', deals: 9000 },
+    { name: 'Oct', deals: 15000 },
+    { name: 'Nov', deals: 14000 },
+    { name: 'Dec', deals: 17000 },
 ];
 
 const EarningChart = () => {
@@ -26,7 +26,7 @@ const EarningChart = () => {
             }}
         >
             <div className="px-2 flex items-center justify-between">
-                <h1 className="text-2xl font-medium">Monthly Earning</h1>
+                <h1 className="text-2xl font-medium">Monthly Deals</h1>
                 <Select defaultValue="2024" className="w-32 h-[40px]">
                     <Option value="2024">2024</Option>
                     <Option value="2025">2025</Option>
@@ -45,7 +45,7 @@ const EarningChart = () => {
                     <Tooltip />
                     <Line
                         type="monotone"
-                        dataKey="earnings"
+                        dataKey="deals"
                         stroke="#79c2d0"
                         strokeWidth={2}
                         dot={{ fill: '#0A8FDC', stroke: '#0A8FDC', strokeWidth: 2, r: 4 }}

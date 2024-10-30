@@ -14,13 +14,9 @@ const Sidebar = () => {
                 },
                 components: {
                     Menu: {
-                        // itemBg: '##0A8FDC',
-                        itemActiveBg: '#0A8FDC',
-                        itemSelectedColor: '#fff',
-                        itemBorderRadius: '30px 0px 0px 30px' as any,
-                        itemHeight: 45,
-
                         itemSelectedBg: '#0A8FDC',
+                        itemSelectedColor: 'white',
+                        itemBorderRadius: '30px 0px 0px 30px' as any,
                     },
                 },
             }}

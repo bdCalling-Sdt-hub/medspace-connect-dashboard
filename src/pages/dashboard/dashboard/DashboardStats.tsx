@@ -3,21 +3,21 @@ import { HiCalendar, HiCurrencyDollar, HiMiniUserGroup } from 'react-icons/hi2';
 const DashboardStats = () => {
     const data = [
         {
-            name: 'Total Brands',
-            count: '20.10K',
+            name: 'Total Seeker',
+            count: '20',
             icon: <HiMiniUserGroup color="#0A8FDC" size={24} />,
             bgColor: '#fff',
         },
         {
-            name: 'Total Campaigns',
-            count: '920',
+            name: 'Total Provider',
+            count: '10',
             icon: <HiCalendar color="#0A8FDC" size={24} />,
 
             bgColor: '#fff',
         },
         {
-            name: 'Total Revenue',
-            count: '150.10K',
+            name: 'Total Deals',
+            count: '3',
             icon: <HiCurrencyDollar color="#0A8FDC" size={24} />,
 
             bgColor: '#fff',

@@ -1,9 +1,12 @@
 import { Layout } from 'antd';
 import { Link } from 'react-router-dom';
+import { useGetProfileQuery } from '../../redux/features/user/userApi';
+import { imageUrl } from '../../redux/base/baseApi';
 
 const { Header } = Layout;
 
 const HeaderDashboard = () => {
+    const { data } = useGetProfileQuery([]);
     return (
         <Header
             style={{
@@ -65,7 +68,7 @@ const HeaderDashboard = () => {
                         }}
                     >
                         <img
-                            src={'/user.svg'}
+                            src={`${imageUrl}/${data?.user?.profile}`}
                             style={{
                                 width: '44px',
                                 height: '44px',
@@ -82,7 +85,7 @@ const HeaderDashboard = () => {
                                 fontWeight: '600',
                             }}
                         >
-                            Anonymous
+                            {data?.user?.name}
                         </h2>
                     </Link>
                 </div>

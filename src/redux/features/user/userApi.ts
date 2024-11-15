@@ -86,7 +86,33 @@ const userApi = baseApi.injectEndpoints({
                 return { data: response.data, pagination: response.pagination };
             },
         }),
+        getProfile: build.query({
+            query: () => {
+                return {
+                    url: '/user/profile',
+                    method: 'GET',
+                };
+            },
+            transformResponse: (response: any) => response.data,
+            providesTags: ['Profile'],
+        }),
+        updateProfile: build.mutation({
+            query: (data) => {
+                return {
+                    url: '/user',
+                    method: 'PATCH',
+                    body: data,
+                };
+            },
+            invalidatesTags: ['Profile'],
+        }),
     }),
 });
 
-export const { useGetAllSpaceProviderQuery, useGetAllSpaceSeekerQuery, useGetAllSubscriberQuery } = userApi;
+export const {
+    useGetAllSpaceProviderQuery,
+    useGetAllSpaceSeekerQuery,
+    useGetAllSubscriberQuery,
+    useUpdateProfileMutation,
+    useGetProfileQuery,
+} = userApi;

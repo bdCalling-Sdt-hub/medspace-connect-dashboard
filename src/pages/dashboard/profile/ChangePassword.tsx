@@ -1,8 +1,25 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, notification } from 'antd';
+import { useChangePasswordMutation } from '../../../redux/features/auth/authApi';
 
 const ChangePassword = () => {
-    const onFinish = (values: any) => {
-        console.log(values, 'from u');
+    const [changePassword] = useChangePasswordMutation();
+    const onFinish = async (values: any) => {
+        try {
+            const res = await changePassword(values).unwrap();
+            if (res.success) {
+                notification.success({
+                    message: 'Success',
+                    description: res.message,
+                    placement: 'topRight',
+                });
+            }
+        } catch (error: any) {
+            notification.error({
+                message: 'Error',
+                description: error.data.message || 'Error occurred while updating profile',
+                placement: 'topRight',
+            });
+        }
     };
     return (
         <div className="max-w-lg mx-auto">
@@ -13,7 +30,7 @@ const ChangePassword = () => {
                             Current Password
                         </label>
                     }
-                    name="current_password"
+                    name="currentPassword"
                     rules={[{ required: true, message: 'Please input new password!' }]}
                 >
                     <Input.Password placeholder="KK!@#$15856" className=" h-12 px-6" />
@@ -24,7 +41,7 @@ const ChangePassword = () => {
                             New Password
                         </label>
                     }
-                    name="new_password"
+                    name="newPassword"
                     rules={[{ required: true, message: 'Please input confirm password!' }]}
                 >
                     <Input.Password placeholder="KK!@#$15856" className="h-12 px-6" />
@@ -35,7 +52,7 @@ const ChangePassword = () => {
                             Confirm Password
                         </label>
                     }
-                    name="confirm_password"
+                    name="confirmPassword"
                     rules={[{ required: true, message: 'Please input confirm password!' }]}
                 >
                     <Input.Password placeholder="KK!@#$15856" className="h-12 px-6" />

@@ -1,4 +1,4 @@
-import { Button, Flex, notification } from 'antd';
+import { Button, Flex, notification, Popconfirm, Popover } from 'antd';
 import { CiEdit } from 'react-icons/ci';
 import { GoQuestion } from 'react-icons/go';
 import { RxCross2 } from 'react-icons/rx';
@@ -124,11 +124,15 @@ const FAQs = () => {
                                     onClick={() => handleEdit(item)}
                                     className="text-2xl cursor-pointer text-[#DBB162]"
                                 />
-                                <RxCross2
-                                    size={24}
-                                    onClick={() => handleDeleteFaq(item._id as number)}
-                                    className="text-2xl cursor-pointer text-red-600"
-                                />
+
+                                <Popconfirm
+                                    title="Are you sure you want to delete this FAQ?"
+                                    onConfirm={() => handleDeleteFaq(item._id as number)}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <RxCross2 size={24} className="text-2xl cursor-pointer text-red-600" />
+                                </Popconfirm>
                             </div>
                         </div>
                     ))}

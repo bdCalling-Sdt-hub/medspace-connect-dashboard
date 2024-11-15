@@ -1,10 +1,27 @@
-import { ConfigProvider, Layout, Menu } from 'antd';
+import { ConfigProvider, Layout, Menu, Modal } from 'antd';
 import { sidebarItemsGenerator } from '../../utils/generateSidebarItems';
 import sidebarItems from '../../utils/sidebarItems';
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../../redux/hooks';
+import { removeUser } from '../../redux/features/auth/authSlice';
 
 const { Sider } = Layout;
 const Sidebar = () => {
+    const dispatch = useAppDispatch();
+    const handleLogout = () => {
+        Modal.confirm({
+            title: 'Confirm Logout',
+            content: 'Are you sure you want to log out?',
+            okText: 'Yes',
+            cancelText: 'No',
+            centered: true,
+            onOk: () => {
+                dispatch(removeUser());
+            },
+        });
+    };
+
+    const menuItems = sidebarItemsGenerator(sidebarItems, handleLogout);
     return (
         <ConfigProvider
             theme={{
@@ -33,12 +50,7 @@ const Sidebar = () => {
                     </div>
                 </Link>
 
-                <Menu
-                    theme="light"
-                    mode="inline"
-                    defaultSelectedKeys={['dashboard']}
-                    items={sidebarItemsGenerator(sidebarItems)}
-                />
+                <Menu theme="light" mode="inline" defaultSelectedKeys={['dashboard']} items={menuItems} />
             </Sider>
         </ConfigProvider>
     );

@@ -1,23 +1,26 @@
 import { HiCalendar, HiCurrencyDollar, HiMiniUserGroup } from 'react-icons/hi2';
+import { useGetDashboardStatsQuery } from '../../../redux/features/dasboard/deshboardApi';
 
 const DashboardStats = () => {
+    const { data: dashboardData } = useGetDashboardStatsQuery([]);
+
     const data = [
         {
             name: 'Total Seeker',
-            count: '20',
+            count: dashboardData?.totalSeeker,
             icon: <HiMiniUserGroup color="#0A8FDC" size={24} />,
             bgColor: '#fff',
         },
         {
             name: 'Total Provider',
-            count: '10',
+            count: dashboardData?.totalProvider,
             icon: <HiCalendar color="#0A8FDC" size={24} />,
 
             bgColor: '#fff',
         },
         {
             name: 'Total Deals',
-            count: '3',
+            count: dashboardData?.totalDeals,
             icon: <HiCurrencyDollar color="#0A8FDC" size={24} />,
 
             bgColor: '#fff',

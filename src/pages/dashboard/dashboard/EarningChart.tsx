@@ -1,22 +1,15 @@
 import { Select } from 'antd';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { useGetDealsChartQuery } from '../../../redux/features/dasboard/deshboardApi';
+import { useState } from 'react';
 const { Option } = Select;
-const data = [
-    { name: 'Jan', deals: 8000 },
-    { name: 'Feb', deals: 12000 },
-    { name: 'Mar', deals: 10000 },
-    { name: 'Apr', deals: 22314 },
-    { name: 'May', deals: 16000 },
-    { name: 'Jun', deals: 15000 },
-    { name: 'Jul', deals: 11000 },
-    { name: 'Aug', deals: 17000 },
-    { name: 'Sep', deals: 9000 },
-    { name: 'Oct', deals: 15000 },
-    { name: 'Nov', deals: 14000 },
-    { name: 'Dec', deals: 17000 },
-];
 
 const EarningChart = () => {
+    const [year, setYear] = useState('2024');
+    const { data, isFetching } = useGetDealsChartQuery([{ name: 'year', value: year }]);
+    if (isFetching) {
+        return <div>Loading...</div>;
+    }
     return (
         <div
             style={{
@@ -27,7 +20,7 @@ const EarningChart = () => {
         >
             <div className="px-2 flex items-center justify-between">
                 <h1 className="text-2xl font-medium">Monthly Deals</h1>
-                <Select defaultValue="2024" className="w-32 h-[40px]">
+                <Select onChange={(value) => setYear(value)} defaultValue="2024" className="w-32 h-[40px]">
                     <Option value="2024">2024</Option>
                     <Option value="2025">2025</Option>
                     <Option value="2026">2026</Option>

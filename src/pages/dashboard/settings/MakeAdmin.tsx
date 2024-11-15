@@ -87,7 +87,7 @@ const MakeAdmin = () => {
             key: 'action',
             width: 150,
             textAlign: 'center',
-            render: (text: string, record: any) => (
+            render: (_text: string, record: any) => (
                 <Popconfirm
                     onConfirm={() => handleDelete(record._id)}
                     title="Delete Admin"

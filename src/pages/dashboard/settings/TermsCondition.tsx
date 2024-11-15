@@ -1,10 +1,24 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import JoditEditor from 'jodit-react';
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
+import {
+    useAddTermsMutation,
+    useGetTermsQuery,
+    useUpdateTermsMutation,
+} from '../../../redux/features/terms-condtion/termsApi';
 
 const TermsCondition = () => {
+    const [addTerms] = useAddTermsMutation();
+    const [updateTerms] = useUpdateTermsMutation();
+    const { data: terms } = useGetTermsQuery([]);
     const editor = useRef(null);
     const [content, setContent] = useState('');
+
+    useEffect(() => {
+        if (terms?.content) {
+            setContent(terms.content);
+        }
+    }, [terms]);
 
     const config = {
         readonly: false,
@@ -13,6 +27,45 @@ const TermsCondition = () => {
             height: '400px',
             background: 'white',
         },
+    };
+
+    const handleCreateTerms = async () => {
+        const termsData = {
+            name: 'TERMSANDCONDITIONS',
+            content,
+        };
+
+        try {
+            if (terms?.content) {
+                const updatedTermsData = {
+                    data: termsData,
+                    id: terms._id,
+                };
+                const res = await updateTerms(updatedTermsData).unwrap();
+                if (res.success) {
+                    notification.success({
+                        message: 'Success',
+                        description: res.message,
+                        placement: 'topRight',
+                    });
+                }
+            } else {
+                const res = await addTerms(termsData).unwrap();
+                if (res.success) {
+                    notification.success({
+                        message: 'Success',
+                        description: res.message,
+                        placement: 'topRight',
+                    });
+                }
+            }
+        } catch (error: any) {
+            notification.error({
+                message: 'Error',
+                description: error.data.message || 'Error occurred while saving terms',
+                placement: 'topRight',
+            });
+        }
     };
 
     return (
@@ -31,6 +84,7 @@ const TermsCondition = () => {
             </div>
             <div className="mt-6 flex justify-center">
                 <Button
+                    onClick={handleCreateTerms}
                     style={{
                         height: 40,
                         width: '150px',

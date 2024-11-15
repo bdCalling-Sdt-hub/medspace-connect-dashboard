@@ -1,12 +1,42 @@
-import { Button, Checkbox, ConfigProvider, Form, FormProps, Input } from 'antd';
+import { Button, Checkbox, ConfigProvider, Form, FormProps, Input, notification } from 'antd';
 import { FieldNamesType } from 'antd/es/cascader';
 import { Link, useNavigate } from 'react-router-dom';
+import { useLoginUserMutation } from '../../redux/features/auth/authApi';
+import { useAppDispatch } from '../../redux/hooks';
+import { decodedUser } from '../../utils/decodedUser';
+import { setUser } from '../../redux/features/auth/authSlice';
 
 const Login = () => {
+    const dispatch = useAppDispatch();
+
+    const [loginUser] = useLoginUserMutation();
     const navigate = useNavigate();
-    const onFinish: FormProps<FieldNamesType>['onFinish'] = (values) => {
-        console.log('Received values of form: ', values);
-        navigate('/');
+    const onFinish: FormProps<FieldNamesType>['onFinish'] = async (values) => {
+        try {
+            const res = await loginUser(values).unwrap();
+            if (res.success) {
+                notification.success({
+                    message: 'Success',
+                    description: res.message,
+                    placement: 'topRight',
+                });
+                const user = decodedUser(res.data);
+                dispatch(
+                    setUser({
+                        user,
+                        token: res.data,
+                    }),
+                );
+
+                navigate('/');
+            }
+        } catch (error: any) {
+            notification.error({
+                message: error.data.message || 'Error occurred while logging in',
+
+                placement: 'topRight',
+            });
+        }
     };
 
     return (

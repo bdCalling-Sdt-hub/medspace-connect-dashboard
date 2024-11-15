@@ -1,12 +1,35 @@
-import { Button, ConfigProvider, Form, FormProps, Input } from 'antd';
-import { FieldNamesType } from 'antd/es/cascader';
+import { Button, ConfigProvider, Form, FormProps, Input, notification } from 'antd';
 import { useNavigate } from 'react-router';
-
+import { useForgetPasswordMutation } from '../../redux/features/auth/authApi';
+type TFormData = {
+    email: string;
+};
 const ForgetPassword = () => {
+    const [forgetPassword] = useForgetPasswordMutation();
     const navigate = useNavigate();
-    const onFinish: FormProps<FieldNamesType>['onFinish'] = (values) => {
-        console.log('Received values of form: ', values);
-        navigate('/verify-otp');
+
+    const onFinish: FormProps<TFormData>['onFinish'] = async (values) => {
+        // console.log('Received values of form: ', values);
+
+        try {
+            const res = await forgetPassword(values).unwrap();
+            if (res.success) {
+                notification.success({
+                    message: 'Success',
+                    description: res.message,
+                    placement: 'topRight',
+                });
+                localStorage.setItem('forgetEmail', values.email);
+
+                navigate('/verify-otp');
+            }
+        } catch (error: any) {
+            notification.error({
+                message: error.data.message || 'Error occurred while forget password',
+
+                placement: 'topRight',
+            });
+        }
     };
 
     return (

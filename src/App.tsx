@@ -1,5 +1,6 @@
 import MainLayout from './components/layout/MainLayout';
 import { ConfigProvider } from 'antd';
+import PrivateRoute from './provider/PrivateRoute';
 function App() {
     return (
         <>
@@ -18,7 +19,9 @@ function App() {
                     },
                 }}
             >
-                <MainLayout />
+                <PrivateRoute>
+                    <MainLayout />
+                </PrivateRoute>
             </ConfigProvider>
         </>
     );

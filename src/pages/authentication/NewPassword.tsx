@@ -1,12 +1,34 @@
-import { Button, ConfigProvider, Form, FormProps, Input } from 'antd';
-import { FieldNamesType } from 'antd/es/cascader';
+import { Button, ConfigProvider, Form, FormProps, Input, notification } from 'antd';
 import { useNavigate } from 'react-router';
+import { useResetPasswordMutation } from '../../redux/features/auth/authApi';
 
+type FieldNamesType = {
+    newPassword: string;
+    confirmPassword: string;
+};
 const NewPassword = () => {
+    const [resetPassword] = useResetPasswordMutation();
     const navigate = useNavigate();
-    const onFinish: FormProps<FieldNamesType>['onFinish'] = (values) => {
-        console.log('Received values of form: ', values);
-        navigate('/');
+    const onFinish: FormProps<FieldNamesType>['onFinish'] = async (values) => {
+        try {
+            const res = await resetPassword(values).unwrap();
+            if (res.success) {
+                notification.success({
+                    message: 'Success',
+                    description: res.message,
+                    placement: 'topRight',
+                });
+
+                navigate('/');
+                localStorage.removeItem('oneTimeToken');
+            }
+        } catch (error: any) {
+            notification.error({
+                message: error.data.message || 'Error occurred while verify Otp',
+
+                placement: 'topRight',
+            });
+        }
     };
 
     return (
@@ -49,7 +71,7 @@ const NewPassword = () => {
                                     New Password
                                 </label>
                             }
-                            name="new_password"
+                            name="newPassword"
                             rules={[{ required: true, message: 'Please input new password!' }]}
                         >
                             <Input.Password placeholder="KK!@#$15856" className=" h-12 px-6" />
@@ -60,7 +82,7 @@ const NewPassword = () => {
                                     Confirm Password
                                 </label>
                             }
-                            name="confirm_password"
+                            name="confirmPassword"
                             rules={[{ required: true, message: 'Please input confirm password!' }]}
                         >
                             <Input.Password placeholder="KK!@#$15856" className="h-12 px-6" />

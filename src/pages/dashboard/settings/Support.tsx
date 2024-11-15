@@ -1,25 +1,36 @@
-import React, { useState } from 'react';
-import { Modal, Form, Input, Select, Button, Table, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Modal, Form, Input, Select, Button, Table, Space, notification } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import {
+    useCreateSupportMutation,
+    useGetSupportQuery,
+    useUpdateSupportMutation,
+} from '../../../redux/features/support/supportApi';
 
 // Define TypeScript interface for support items
 interface SupportItem {
-    id: number;
+    _id: number;
     type: 'Location' | 'Email' | 'Get in Touch';
     title: string;
     description: string;
 }
 
 const Support: React.FC = () => {
-    const [data, setData] = useState<SupportItem[]>([
-        { id: 1, type: 'Location', title: 'Our Location', description: 'Al. Brucknera 63, Wroclaw' },
-        { id: 2, type: 'Email', title: 'Email Us', description: 'john@example.com' },
-    ]);
+    const [createSupport] = useCreateSupportMutation();
+    const [updateSupport] = useUpdateSupportMutation();
+    const { data: supports } = useGetSupportQuery([]);
+
+    const [data, setData] = useState<SupportItem[]>();
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     const [editingItem, setEditingItem] = useState<SupportItem | null>(null);
 
     const [form] = Form.useForm();
 
+    useEffect(() => {
+        if (supports) {
+            setData(supports);
+        }
+    }, [supports]);
     // Show modal for adding a new item
     const handleAdd = () => {
         setEditingItem(null);
@@ -35,27 +46,56 @@ const Support: React.FC = () => {
     };
 
     // Create or update item
-    const handleCreateOrUpdate = () => {
-        form.validateFields().then((values) => {
-            const newItem: SupportItem = {
-                id: editingItem ? editingItem.id : data.length + 1,
-                ...values,
-            };
-            if (editingItem) {
-                setData(data.map((item) => (item.id === editingItem.id ? newItem : item)));
-            } else {
-                setData([...data, newItem]);
+    const handleCreateOrUpdate = async (values: FormData) => {
+        if (editingItem) {
+            try {
+                const res = await updateSupport({ id: editingItem._id, data: values }).unwrap();
+                if (res.success) {
+                    notification.success({
+                        message: 'Success',
+                        description: res.message,
+                        placement: 'topRight',
+                    });
+                }
+            } catch (error: any) {
+                notification.error({
+                    message: 'Error',
+                    description: error.data.message || 'Error occurred while updating support',
+                    placement: 'topRight',
+                });
             }
-            setIsModalVisible(false);
-            form.resetFields();
-        });
+        } else {
+            try {
+                const res = await createSupport(values).unwrap();
+                if (res.success) {
+                    notification.success({
+                        message: 'Success',
+                        description: res.message,
+                        placement: 'topRight',
+                    });
+                }
+            } catch (error: any) {
+                notification.error({
+                    message: 'Error',
+                    description: error.data.message || 'Error occurred while creating support',
+                    placement: 'topRight',
+                });
+            }
+        }
+        setIsModalVisible(false);
+        form.resetFields();
     };
 
     // Columns for the table with type annotations
     const columns: ColumnsType<SupportItem> = [
         { title: 'Type', dataIndex: 'type', key: 'type' },
         { title: 'Title', dataIndex: 'title', key: 'title' },
-        { title: 'Description', dataIndex: 'description', key: 'description' },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description',
+            render: (description: string) => <span className="block max-w-[30ch] truncate">{description}</span>,
+        },
         {
             title: 'Actions',
             key: 'actions',
@@ -90,29 +130,9 @@ const Support: React.FC = () => {
                 open={isModalVisible}
                 title={editingItem ? 'Edit Support Item' : 'Add Support Item'}
                 onCancel={() => setIsModalVisible(false)}
-                footer={[
-                    <Button
-                        style={{
-                            height: 42,
-                        }}
-                        key="cancel"
-                        onClick={() => setIsModalVisible(false)}
-                    >
-                        Cancel
-                    </Button>,
-                    <Button
-                        style={{
-                            height: 42,
-                        }}
-                        key="submit"
-                        type="primary"
-                        onClick={handleCreateOrUpdate}
-                    >
-                        {editingItem ? 'Update Support' : 'Add Support'}
-                    </Button>,
-                ]}
+                footer={false}
             >
-                <Form form={form} layout="vertical">
+                <Form onFinish={handleCreateOrUpdate} form={form} layout="vertical">
                     <Form.Item name="type" label="Type" rules={[{ required: true, message: 'Please select a type' }]}>
                         <Select style={{ height: 42 }}>
                             <Select.Option value="Location">Location</Select.Option>
@@ -129,6 +149,17 @@ const Support: React.FC = () => {
                         rules={[{ required: true, message: 'Please enter a description' }]}
                     >
                         <Input.TextArea style={{ height: 42 }} />
+                    </Form.Item>
+                    <Form.Item className="flex justify-end">
+                        <Button
+                            style={{
+                                height: 42,
+                            }}
+                            htmlType="submit"
+                            type="primary"
+                        >
+                            {editingItem ? 'Update Support' : 'Add Support'}
+                        </Button>
                     </Form.Item>
                 </Form>
             </Modal>

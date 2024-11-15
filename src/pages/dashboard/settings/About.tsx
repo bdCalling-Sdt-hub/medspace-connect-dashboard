@@ -1,126 +1,211 @@
 import React, { useState } from 'react';
-import { Modal, Form, Input, Button, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Table, Form, Input, Button, Modal, message, Upload, notification } from 'antd';
+import { HiUpload } from 'react-icons/hi';
+import TextArea from 'antd/es/input/TextArea';
+import {
+    useCreateAboutMutation,
+    useGetAboutQuery,
+    useUpdateAboutMutation,
+} from '../../../redux/features/about/aboutApi';
+import { imageUrl as baseImageUrl } from '../../../redux/base/baseApi';
 
-interface AboutItem {
-    id: number;
+// Define types for the About entry
+interface AboutEntry {
+    _id: number;
     title: string;
     description: string;
-    imageUrl: string;
+    image: string;
 }
 
 const About: React.FC = () => {
-    const [data, setData] = useState<AboutItem[]>([
-        {
-            id: 1,
-            title: 'Our Story',
-            description:
-                'Med Space Connect was born from a vision to bridge the gap between patients and healthcare providers. We believe that everyone deserves accessible, quality medical care. Our journey began with a simple goal: to create a community where healthcare is not just a service but a supportive experience. Today, we are dedicated to enhancing lives by connecting individuals with the resources they need to achieve well-being.',
-            imageUrl: '/our-story.png',
-        },
-        {
-            id: 2,
-            title: 'Our Team',
-            description:
-                'Our team is a blend of passionate healthcare professionals, tech innovators, and dedicated support staff, all committed to advancing patient care through technology. From doctors and medical advisors to software engineers, every member of our team contributes to a shared mission: making healthcare accessible, reliable, and personalized. We work tirelessly to ensure Med Space Connect is a trusted platform for our users.',
-            imageUrl: '/our-team.png',
-        },
-    ]);
-
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    const [editingItem, setEditingItem] = useState<AboutItem | null>(null);
-    const [imageUrl, setImageUrl] = useState<string>('');
+    const [createAbout] = useCreateAboutMutation();
+    const [updateAbout] = useUpdateAboutMutation();
+    const { data: aboutData } = useGetAboutQuery([]);
     const [form] = Form.useForm();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [editingEntry, setEditingEntry] = useState<AboutEntry | null>(null);
+    const [imageUrl, setImageUrl] = useState<string>('');
 
-    const handleEdit = (item: AboutItem) => {
-        setEditingItem(item);
-        form.setFieldsValue(item);
-        setImageUrl(item.imageUrl);
-        setIsModalVisible(true);
-    };
+    const openModal = (entry: AboutEntry | null) => {
+        setEditingEntry(entry);
+        setVisible(true);
 
-    const handleCreateOrUpdate = () => {
-        form.validateFields().then((values) => {
-            const updatedItem: AboutItem = {
-                ...editingItem,
-                ...values,
-                imageUrl,
-            };
-            setData(data.map((item) => (item.id === editingItem?.id ? updatedItem : item)));
-            setIsModalVisible(false);
+        if (entry) {
+            form.setFieldsValue({
+                title: entry.title,
+                description: entry.description,
+            });
+
+            // Use the backend URL for existing images
+            setImageUrl(`${baseImageUrl}/${entry.image}`);
+        } else {
             form.resetFields();
-            setImageUrl('');
-        });
+            setImageUrl(''); // Clear the image for new entries
+        }
     };
+
+    const onFinish = async (values: any) => {
+        const { image, title, description } = values;
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        if (image) {
+            formData.append('aboutImage', image);
+        }
+        const updatedInfo = {
+            data: formData,
+            id: editingEntry?._id,
+        };
+        console.log(editingEntry);
+        if (editingEntry) {
+            try {
+                const res = await updateAbout(updatedInfo).unwrap();
+
+                if (res.success) {
+                    notification.success({
+                        message: 'Success',
+                        description: res.message,
+                        placement: 'topRight',
+                    });
+                    setVisible(false);
+                    form.resetFields();
+                    setImageUrl('');
+                    return;
+                }
+            } catch (error: any) {
+                notification.error({
+                    message: 'Error',
+                    description: error.data.message || 'Error occurred while creating about',
+                    placement: 'topRight',
+                });
+            }
+        }
+        try {
+            const res = await createAbout(formData).unwrap();
+
+            if (res.success) {
+                notification.success({
+                    message: 'Success',
+                    description: res.message,
+                    placement: 'topRight',
+                });
+                setVisible(false);
+                form.resetFields();
+                setImageUrl('');
+            }
+        } catch (error: any) {
+            notification.error({
+                message: 'Error',
+                description: error.data.message || 'Error occurred while creating about',
+                placement: 'topRight',
+            });
+        }
+    };
+
     const handleUpload = (info: any) => {
         const file = info.file.originFileObj || info.file;
-
         if (file && file.type && file.type.startsWith('image/')) {
             const imagePreviewUrl = URL.createObjectURL(file);
-            setImageUrl(imagePreviewUrl);
+            setImageUrl(imagePreviewUrl); // For preview
+            form.setFieldsValue({ image: file }); // Store the file object in the form
             message.success(`${file.name} selected successfully`);
         } else {
             message.error('Please select a valid image file (PNG, JPG, or JPEG)');
         }
     };
 
-    return (
-        <div className="p-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                {data.map((item) => (
-                    <div
-                        key={item.id}
-                        className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center"
-                        style={{ margin: 'auto' }}
+    const columns = [
+        {
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description',
+            render: (description: string) => <span className="block max-w-[20ch] truncate">{description}</span>,
+        },
+        {
+            title: 'Image',
+            dataIndex: 'image',
+            key: 'image',
+            render: (image: string) => (
+                <img src={`${baseImageUrl}/${image}`} alt="About" style={{ width: 100, borderRadius: 5 }} />
+            ),
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_text: any, entry: AboutEntry) => (
+                <div>
+                    <Button
+                        type="link"
+                        onClick={() => {
+                            openModal(entry);
+                        }}
                     >
-                        <img
-                            src={item.imageUrl}
-                            alt={item.title}
-                            className="w-full h-[250px] object-cover rounded-lg mb-4"
-                        />
-                        <h2 className="text-2xl font-semibold text-primary text-center">{item.title}</h2>
-                        <p className="text-gray-600 text-center mb-4 line-clamp-2">{item.description}</p>
-                        <Button style={{ height: 42, width: '100%' }} type="primary" onClick={() => handleEdit(item)}>
-                            Edit {item.title}
-                        </Button>
-                    </div>
-                ))}
+                        Edit
+                    </Button>
+                </div>
+            ),
+        },
+    ];
+
+    return (
+        <div>
+            <div className="flex justify-between items-center my-5">
+                <h3 className="text-3xl text-primary font-semibold">About</h3>
+                <Button type="primary" onClick={() => openModal(null)} style={{ marginBottom: 20, height: 42 }}>
+                    Add About
+                </Button>
             </div>
 
-            {/* Modal for Edit form */}
+            <Table columns={columns} dataSource={aboutData} pagination={false} />
+
             <Modal
-                width={500}
-                centered
-                open={isModalVisible}
-                title={editingItem ? `Edit ${editingItem.title}` : 'Edit Section'}
-                onCancel={() => setIsModalVisible(false)}
-                footer={[
-                    <Button key="cancel" style={{ height: 42 }} onClick={() => setIsModalVisible(false)}>
-                        Cancel
-                    </Button>,
-                    <Button key="submit" style={{ height: 42 }} type="primary" onClick={handleCreateOrUpdate}>
-                        Save
-                    </Button>,
-                ]}
+                title={editingEntry ? 'Edit About' : 'Add About'}
+                open={visible}
+                onCancel={() => setVisible(false)}
+                footer={null}
+                maskClosable={false}
             >
-                <Form form={form} layout="vertical">
-                    <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter a title' }]}>
-                        <Input style={{ height: 42 }} />
-                    </Form.Item>
+                <Form form={form} layout="vertical" onFinish={onFinish}>
                     <Form.Item
-                        name="description"
-                        label="Description"
-                        rules={[{ required: true, message: 'Please enter a description' }]}
+                        label="Title"
+                        name="title"
+                        rules={[{ required: true, message: 'Please enter the title for this section!' }]}
                     >
-                        <Input.TextArea
+                        <Input
                             style={{
-                                padding: '10px 20px',
-                                borderRadius: 10,
+                                height: 42,
                             }}
-                            rows={3}
+                            placeholder="Enter a title (e.g., About Us, Our Mission)"
                         />
                     </Form.Item>
-                    <Form.Item label="Image Upload">
+                    <Form.Item
+                        label="Description"
+                        name="description"
+                        rules={[{ required: true, message: 'Please enter the description for this section!' }]}
+                    >
+                        <TextArea
+                            style={{
+                                borderRadius: 10,
+                            }}
+                            placeholder="Enter a detailed description"
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Image Upload"
+                        name="image"
+                        rules={
+                            editingEntry
+                                ? []
+                                : [{ required: true, message: 'Please upload an image to represent this section!' }]
+                        }
+                    >
                         <div className="relative w-full flex justify-center items-center">
                             {imageUrl && (
                                 <img
@@ -138,11 +223,11 @@ const About: React.FC = () => {
                                 name="image"
                                 listType="picture"
                                 showUploadList={false}
-                                beforeUpload={() => false}
+                                beforeUpload={() => false} // Prevent automatic upload
                                 onChange={handleUpload}
                             >
                                 <Button
-                                    icon={<UploadOutlined />}
+                                    icon={<HiUpload />}
                                     style={{
                                         height: 42,
                                         position: 'absolute',
@@ -155,6 +240,18 @@ const About: React.FC = () => {
                                 </Button>
                             </Upload>
                         </div>
+                    </Form.Item>
+
+                    <Form.Item className="flex justify-end">
+                        <Button
+                            style={{
+                                height: 42,
+                            }}
+                            type="primary"
+                            htmlType="submit"
+                        >
+                            {editingEntry ? 'Update About' : 'Add About'}
+                        </Button>
                     </Form.Item>
                 </Form>
             </Modal>

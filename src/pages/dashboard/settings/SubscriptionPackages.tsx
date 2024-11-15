@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
-import { Table, Form, Input, Button, Modal, Select, message } from 'antd';
+import { Table, Form, Input, Button, Modal, Select, notification, Tooltip } from 'antd';
+import {
+    useCreateSubscriptionMutation,
+    useGetSubscriptionQuery,
+    useUpdateSubscriptionMutation,
+} from '../../../redux/features/subcription/subscriptionApi';
 
 // Define types for the package
 interface SubscriptionPackage {
-    key: number;
+    _id: string;
     name: string;
     price: string;
     features: string[];
+    allowedSpaces: number;
 }
 
 const { Option } = Select;
 
 const SubscriptionPackages: React.FC = () => {
-    const [packages, setPackages] = useState<SubscriptionPackage[]>([]);
+    const [createSubscription] = useCreateSubscriptionMutation();
+    const [updateSubscription] = useUpdateSubscriptionMutation();
+    const { data: subscriptions } = useGetSubscriptionQuery([]);
     const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false);
     const [editingPackage, setEditingPackage] = useState<SubscriptionPackage | null>(null);
@@ -25,40 +33,72 @@ const SubscriptionPackages: React.FC = () => {
                 packageName: pkg.name,
                 price: pkg.price,
                 features: pkg.features,
+                allowedSpaces: pkg.allowedSpaces,
             });
         } else {
             form.resetFields();
         }
     };
 
-    const onFinish = (values: { packageName: string; price: string; features: string[] }) => {
+    const onFinish = async (values: any) => {
+        // If editing an existing package
         if (editingPackage) {
-            // Edit existing package
-            const updatedPackages = packages.map((pkg) =>
-                pkg.key === editingPackage.key
-                    ? { ...pkg, name: values.packageName, price: values.price, features: values.features }
-                    : pkg,
-            );
-            setPackages(updatedPackages);
-            message.success('Package updated successfully!');
-        } else {
-            // Add new package
-            if (packages.length >= 2) {
-                message.error('You can only add a maximum of 2 packages.');
-                return;
-            }
-
-            const newPackage: SubscriptionPackage = {
-                key: packages.length + 1,
-                name: values.packageName,
-                price: values.price,
+            const updatedInfo = {
+                name: values.packageName.toUpperCase(),
+                price: Number(values.price),
                 features: values.features,
+                allowedSpaces: Number(values.allowedSpaces),
             };
 
-            setPackages([...packages, newPackage]);
-            message.success('Package added successfully!');
+            // Update the subscription package
+            try {
+                const res = await updateSubscription({
+                    data: updatedInfo,
+                    id: editingPackage._id,
+                }).unwrap();
+
+                if (res.success) {
+                    notification.success({
+                        message: 'Success',
+                        description: res.message,
+                        placement: 'topRight',
+                    });
+                }
+            } catch (error: any) {
+                notification.error({
+                    message: 'Error',
+                    description: error.data.message || 'Error occurred while updating package',
+                    placement: 'topRight',
+                });
+            }
+        } else {
+            // Create new subscription package
+            const newPackage = {
+                name: values.packageName.toUpperCase(),
+                price: Number(values.price),
+                features: values.features,
+                allowedSpaces: Number(values.allowedSpaces),
+            };
+
+            try {
+                const res = await createSubscription(newPackage).unwrap();
+                if (res.success) {
+                    notification.success({
+                        message: 'Success',
+                        description: res.message,
+                        placement: 'topRight',
+                    });
+                }
+            } catch (error: any) {
+                notification.error({
+                    message: 'Error',
+                    description: error.data.message || 'Error occurred while creating package',
+                    placement: 'topRight',
+                });
+            }
         }
 
+        // Close the modal and reset form
         setVisible(false);
         form.resetFields();
     };
@@ -78,7 +118,30 @@ const SubscriptionPackages: React.FC = () => {
             title: 'Features',
             dataIndex: 'features',
             key: 'features',
-            render: (features: string[]) => features.join(', '),
+            render: (features: string[]) => {
+                const featureText = features.join(', ');
+                const truncatedText = featureText.length > 100 ? featureText.substring(0, 100) + '...' : featureText;
+
+                return (
+                    <Tooltip title={featureText}>
+                        <p
+                            style={{
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: '200px',
+                            }}
+                        >
+                            {truncatedText}
+                        </p>
+                    </Tooltip>
+                );
+            },
+        },
+        {
+            title: 'Allowed Spaces',
+            key: 'allowedSpaces',
+            dataIndex: 'allowedSpaces',
         },
         {
             title: 'Action',
@@ -96,7 +159,7 @@ const SubscriptionPackages: React.FC = () => {
                 </Button>
             </div>
 
-            <Table columns={columns} dataSource={packages} pagination={false} />
+            <Table columns={columns} dataSource={subscriptions} pagination={false} />
 
             <Modal
                 title={editingPackage ? 'Edit Package' : 'Add Package'}
@@ -116,6 +179,18 @@ const SubscriptionPackages: React.FC = () => {
                                 height: 42,
                             }}
                             placeholder="Enter package name (e.g., Basic, Pro)"
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label="Allowed Spaces"
+                        name="allowedSpaces"
+                        rules={[{ required: true, message: 'Please enter allowed spaces number!' }]}
+                    >
+                        <Input
+                            style={{
+                                height: 42,
+                            }}
+                            placeholder="Enter allowed spaces number"
                         />
                     </Form.Item>
 

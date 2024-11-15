@@ -4,7 +4,7 @@ import { IoBarChartOutline, IoDocumentTextOutline } from 'react-icons/io5';
 import { BsPersonGear } from 'react-icons/bs';
 import { TbLogout } from 'react-icons/tb';
 import { LuScrollText, LuUser } from 'react-icons/lu';
-import { PiListMagnifyingGlassThin } from 'react-icons/pi';
+// import { PiListMagnifyingGlassThin } from 'react-icons/pi';
 import { MdOutlineBedroomParent } from 'react-icons/md';
 import { TfiWallet } from 'react-icons/tfi';
 import { RiUserStarLine } from 'react-icons/ri';
@@ -30,23 +30,23 @@ const sidebarItems: TSidebarItem[] = [
         icon: <LuUser size={24} />,
     },
     {
-        key: '111434',
-        label: 'Space Post',
-        path: 'space-post',
-        icon: <MdOutlineBedroomParent size={24} />,
-    },
-    {
         key: '11',
         label: 'Subscribed User',
         path: 'subscribed-users',
         icon: <RiUserStarLine size={24} />,
     },
     {
-        key: '111',
-        label: 'Dealing Details',
-        path: 'dealing-details',
-        icon: <PiListMagnifyingGlassThin size={24} />,
+        key: '111434',
+        label: 'Space Post',
+        path: 'space-post',
+        icon: <MdOutlineBedroomParent size={24} />,
     },
+    // {
+    //     key: '111',
+    //     label: 'Dealing Details',
+    //     path: 'dealing-details',
+    //     icon: <PiListMagnifyingGlassThin size={24} />,
+    // },
     {
         key: '3',
         label: 'Settings',

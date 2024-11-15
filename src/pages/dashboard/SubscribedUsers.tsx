@@ -1,11 +1,17 @@
 import { Table } from 'antd';
+import { useState } from 'react';
+import { useGetAllSubscriberQuery } from '../../redux/features/user/userApi';
+import moment from 'moment';
 
 const SubscribedUsers = () => {
+    const [page, setPage] = useState(1);
+    const { data: subscribedUserData } = useGetAllSubscriberQuery([{ name: 'page', value: page }]);
     const columns = [
         {
             title: 'User ID',
-            dataIndex: 'userId',
-            key: 'userId',
+            dataIndex: '_id',
+            key: 'id',
+            render: (_text: string, _record: any, index: number) => <p>{index + 1}</p>,
         },
         {
             title: 'Name',
@@ -19,27 +25,29 @@ const SubscribedUsers = () => {
         },
         {
             title: 'Subscription Plan',
-            dataIndex: 'subscriptionPlan',
-            key: 'subscriptionPlan',
+            dataIndex: 'subscription',
+            key: 'subscription',
+            render: (subscription: any) => {
+                return <p>{subscription.package.name}</p>;
+            },
         },
         {
             title: 'Start Date',
-            dataIndex: 'startDate',
+            dataIndex: 'subscription',
             key: 'startDate',
+            render: (subscription: any) => {
+                return <p>{moment(subscription?.createdAt).format('MM/DD/YYYY')}</p>;
+            },
         },
-        {
-            title: 'End Date',
-            dataIndex: 'endDate',
-            key: 'endDate',
-        },
+
         {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
             render: (text: string) => (
                 <span
-                    className={`inline-block px-2 py-1 rounded-full ${
-                        text === 'Active' ? 'bg-primary text-white' : 'bg-red-500 text-white'
+                    className={`inline-block text-white px-2 py-1 rounded-full ${
+                        text === 'active' ? 'bg-primary ' : 'bg-red-500 '
                     }`}
                 >
                     {text}
@@ -48,71 +56,18 @@ const SubscribedUsers = () => {
         },
     ];
 
-    // Sample data for subscribed users with Basic and Pro plans
-    const data = [
-        {
-            key: '1',
-            userId: 'U001',
-            name: 'Alice Carter',
-            email: 'alice.carter@example.com',
-            subscriptionPlan: 'Pro',
-            startDate: '2024-01-15',
-            endDate: '2025-01-15',
-            status: 'Active',
-        },
-        {
-            key: '2',
-            userId: 'U002',
-            name: 'Brian Johnson',
-            email: 'brian.johnson@example.com',
-            subscriptionPlan: 'Basic',
-            startDate: '2024-02-20',
-            endDate: '2025-02-20',
-            status: 'Active',
-        },
-        {
-            key: '3',
-            userId: 'U003',
-            name: 'Catherine White',
-            email: 'catherine.white@example.com',
-            subscriptionPlan: 'Pro',
-            startDate: '2024-03-05',
-            endDate: '2025-03-05',
-            status: 'Inactive',
-        },
-        {
-            key: '4',
-            userId: 'U004',
-            name: 'Daniel Green',
-            email: 'daniel.green@example.com',
-            subscriptionPlan: 'Basic',
-            startDate: '2024-04-10',
-            endDate: '2025-04-10',
-            status: 'Active',
-        },
-        {
-            key: '5',
-            userId: 'U005',
-            name: 'Ella Brown',
-            email: 'ella.brown@example.com',
-            subscriptionPlan: 'Pro',
-            startDate: '2024-05-22',
-            endDate: '2025-05-22',
-            status: 'Inactive',
-        },
-        {
-            key: '6',
-            userId: 'U006',
-            name: 'Frank Lewis',
-            email: 'frank.lewis@example.com',
-            subscriptionPlan: 'Basic',
-            startDate: '2024-06-30',
-            endDate: '2025-06-30',
-            status: 'Active',
-        },
-    ];
-
-    return <Table columns={columns} dataSource={data} />;
+    return (
+        <Table
+            pagination={{
+                current: page,
+                pageSize: subscribedUserData?.pagination?.limit,
+                onChange: (newPage) => setPage(newPage),
+                total: subscribedUserData?.pagination?.total,
+            }}
+            columns={columns}
+            dataSource={subscribedUserData?.data}
+        />
+    );
 };
 
 export default SubscribedUsers;

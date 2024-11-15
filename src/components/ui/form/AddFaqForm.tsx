@@ -3,27 +3,36 @@ import { AiOutlinePlus } from 'react-icons/ai';
 
 const { TextArea } = Input;
 
-const AddFaqForm = ({ onFinish }: { onFinish: (values: any) => void }) => {
+interface AddFaqFormProps {
+    onFinish: (values: any) => void;
+    initialValues?: { question: string; answer: string };
+    isEdit?: boolean;
+}
+
+const AddFaqForm = ({ onFinish, initialValues, isEdit }: AddFaqFormProps) => {
     const [form] = Form.useForm();
 
     return (
-        <Form form={form} layout="vertical" onFinish={onFinish}>
-            {/* Product Name */}
+        <Form
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            initialValues={initialValues} // Prepopulate fields for editing
+        >
             <Form.Item
                 label="Question"
-                name="productName"
+                name="question"
                 rules={[{ required: true, message: 'Please enter a question' }]}
             >
                 <Input
                     style={{
                         height: 42,
                     }}
-                    placeholder="Your faq question"
+                    placeholder="Your FAQ question"
                 />
             </Form.Item>
 
-            {/* Description */}
-            <Form.Item label="Answer" name="answer" rules={[{ required: true, message: 'Please enter a answer' }]}>
+            <Form.Item label="Answer" name="answer" rules={[{ required: true, message: 'Please enter an answer' }]}>
                 <TextArea
                     style={{
                         width: '100%',
@@ -32,11 +41,10 @@ const AddFaqForm = ({ onFinish }: { onFinish: (values: any) => void }) => {
                         backgroundColor: '#F9F9F9',
                     }}
                     rows={3}
-                    placeholder="Your faq answer"
+                    placeholder="Your FAQ answer"
                 />
             </Form.Item>
 
-            {/* Submit Button */}
             <Form.Item className="flex justify-center">
                 <Button
                     icon={<AiOutlinePlus />}
@@ -46,7 +54,7 @@ const AddFaqForm = ({ onFinish }: { onFinish: (values: any) => void }) => {
                     }}
                     type="primary"
                 >
-                    Add FAQ
+                    {isEdit ? 'Update FAQ' : 'Add FAQ'} {/* Dynamic button text */}
                 </Button>
             </Form.Item>
         </Form>

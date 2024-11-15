@@ -11,7 +11,7 @@ const EditFaqForm = ({ onFinish }: { onFinish: (values: any) => void }) => {
             {/* Product Name */}
             <Form.Item
                 label="Question"
-                name="productName"
+                name="question"
                 rules={[{ required: true, message: 'Please enter a question' }]}
             >
                 <Input

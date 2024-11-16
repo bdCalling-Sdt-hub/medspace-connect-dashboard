@@ -190,6 +190,7 @@ const About: React.FC = () => {
                         rules={[{ required: true, message: 'Please enter the description for this section!' }]}
                     >
                         <TextArea
+                            rows={6}
                             style={{
                                 borderRadius: 10,
                             }}

@@ -1,12 +1,47 @@
-import { Layout } from 'antd';
+import { Layout, notification } from 'antd';
 import { Link } from 'react-router-dom';
 import { useGetProfileQuery } from '../../redux/features/user/userApi';
 import { imageUrl } from '../../redux/base/baseApi';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {
+    useGetNotificationQuery,
+    useReadNotificationMutation,
+} from '../../redux/features/notification/notificationApi';
+import { useEffect } from 'react';
+import { connectSocket } from '../../utils/socket';
+import { addNotification } from '../../redux/features/notification/notificationSlice';
 
 const { Header } = Layout;
 
 const HeaderDashboard = () => {
+    const dispatch = useAppDispatch();
     const { data } = useGetProfileQuery([]);
+    const { user } = useAppSelector((state) => state.auth);
+    const notificationData = useAppSelector((state) => state.notification);
+    const [readNotification] = useReadNotificationMutation();
+    useGetNotificationQuery([]);
+
+    useEffect(() => {
+        const socket = connectSocket('http://192.168.10.15:3000');
+
+        socket.on(`new_notification::${user?.id.toString()}`, (newData) => {
+            console.log(newData);
+            dispatch(addNotification(newData));
+        });
+
+        return () => {
+            if (socket) socket.disconnect();
+        };
+    }, [user]);
+    const handleReadNotification = async () => {
+        try {
+            await readNotification(undefined).unwrap();
+        } catch (error: any) {
+            notification.error({
+                message: error?.data?.message || 'Failed to get notification',
+            });
+        }
+    };
     return (
         <Header
             style={{
@@ -21,11 +56,14 @@ const HeaderDashboard = () => {
                     {/*notification icons */}
 
                     <Link to={'/notification'}>
-                        <div className="size-10 bg-[#F2F2F2] rounded-full flex items-center justify-center ">
+                        <div
+                            onClick={() => handleReadNotification()}
+                            className="size-10 bg-[#F2F2F2] rounded-full flex items-center justify-center "
+                        >
                             <button className="py-4 px-1 relative border-2 border-transparent text-gray-800 rounded-full hover:text-gray-400 focus:outline-none focus:text-gray-500 transition duration-150 ease-in-out">
                                 <span className="absolute inset-0 -top-4  -mr-6">
                                     <div className="inline-flex items-center px-1.5 py-0.5 border-2 border-white rounded-full text-xs font-semibold leading-4 bg-primary text-white">
-                                        6
+                                        {notificationData.unreadCount}
                                     </div>
                                 </span>
                                 <svg

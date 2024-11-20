@@ -19,7 +19,7 @@ const EarningChart = () => {
             }}
         >
             <div className="px-2 flex items-center justify-between">
-                <h1 className="text-2xl font-medium">Monthly Deals</h1>
+                <h1 className="text-2xl font-medium">Monthly Interests</h1>
                 <Select onChange={(value) => setYear(value)} defaultValue="2024" className="w-32 h-[40px]">
                     <Option value="2024">2024</Option>
                     <Option value="2025">2025</Option>

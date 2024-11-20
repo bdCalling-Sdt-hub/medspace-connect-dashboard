@@ -9,6 +9,8 @@ import { TfiWallet } from 'react-icons/tfi';
 import { RiUserStarLine } from 'react-icons/ri';
 import { GoGear } from 'react-icons/go';
 import { BiSupport } from 'react-icons/bi';
+import { GiHospitalCross } from 'react-icons/gi';
+import { PiHospital } from 'react-icons/pi';
 
 const sidebarItems: TSidebarItem[] = [
     {
@@ -69,6 +71,18 @@ const sidebarItems: TSidebarItem[] = [
                 label: 'User Agreement',
                 path: 'agreement',
                 icon: <LuScrollText size={24} />,
+            },
+            {
+                key: '428',
+                label: 'Practice Type',
+                path: 'practice-type',
+                icon: <PiHospital size={24} />,
+            },
+            {
+                key: '43',
+                label: 'Practice Need',
+                path: 'practice-need',
+                icon: <GiHospitalCross size={24} />,
             },
             {
                 key: '44',

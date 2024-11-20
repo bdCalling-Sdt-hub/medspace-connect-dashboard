@@ -19,7 +19,7 @@ const DashboardStats = () => {
             bgColor: '#fff',
         },
         {
-            name: 'Total Deals',
+            name: 'Total Interests',
             count: dashboardData?.totalDeals,
             icon: <HiCurrencyDollar color="#0A8FDC" size={24} />,
 

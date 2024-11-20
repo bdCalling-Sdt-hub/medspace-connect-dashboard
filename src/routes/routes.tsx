@@ -21,6 +21,8 @@ import SpaceSeeker from '../pages/dashboard/SpaceSeeker';
 import SpacePosts from '../pages/dashboard/SpacePosts';
 import SubscribedUsers from '../pages/dashboard/SubscribedUsers';
 import DealingDetails from '../pages/dashboard/DealingDetails';
+import PracticeFor from '../pages/dashboard/settings/PracticeFor';
+import PracticeNeed from '../pages/dashboard/settings/PracticeNeed';
 
 const router = createBrowserRouter([
     {
@@ -40,6 +42,8 @@ const router = createBrowserRouter([
             { path: 'make-admin', element: <MakeAdmin /> },
             { path: 'terms', element: <TermsCondition /> },
             { path: 'agreement', element: <UserAgreement /> },
+            { path: 'practice-type', element: <PracticeFor /> },
+            { path: 'practice-need', element: <PracticeNeed /> },
             { path: 'about', element: <About /> },
             { path: 'support', element: <Support /> },
             { path: 'faqs', element: <FAQs /> },

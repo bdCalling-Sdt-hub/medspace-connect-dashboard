@@ -1,4 +1,4 @@
-import { Button, Flex, notification, Popconfirm, Popover } from 'antd';
+import { Button, Flex, notification, Popconfirm } from 'antd';
 import { CiEdit } from 'react-icons/ci';
 import { GoQuestion } from 'react-icons/go';
 import { RxCross2 } from 'react-icons/rx';

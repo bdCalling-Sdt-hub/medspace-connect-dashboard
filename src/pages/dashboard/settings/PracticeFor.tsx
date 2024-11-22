@@ -73,7 +73,7 @@ const PracticeFor = () => {
 
     // Columns for the table with type annotations
     const columns = [
-        { title: 'S.No', dataIndex: 'id', key: 'id', render: (_: any, record: any, index: number) => index + 1 },
+        { title: 'S.No', dataIndex: 'id', key: 'id', render: (_: any, _record: any, index: number) => index + 1 },
         { title: 'Type', dataIndex: 'type', key: 'type' },
         {
             title: 'Actions',

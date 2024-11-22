@@ -5,7 +5,7 @@ export const baseApi = createApi({
     reducerPath: 'baseApi',
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://195.35.6.13:5000/api/v1',
-        credentials: 'include',
+        // credentials: 'include',
         prepareHeaders: (header, { getState }) => {
             const { token } = (getState() as RootState).auth;
             if (token) {

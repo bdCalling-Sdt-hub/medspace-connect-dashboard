@@ -11,6 +11,7 @@ import { GoGear } from 'react-icons/go';
 import { BiSupport } from 'react-icons/bi';
 import { GiHospitalCross } from 'react-icons/gi';
 import { PiHospital } from 'react-icons/pi';
+import { CiDiscount1 } from 'react-icons/ci';
 
 const sidebarItems: TSidebarItem[] = [
     {
@@ -53,6 +54,12 @@ const sidebarItems: TSidebarItem[] = [
                 label: 'Subscription',
                 path: 'subscriptions',
                 icon: <TfiWallet size={24} />,
+            },
+            {
+                key: '3434',
+                label: 'Coupon Management',
+                path: 'coupon-management',
+                icon: <CiDiscount1 size={24} />,
             },
             {
                 key: '3',

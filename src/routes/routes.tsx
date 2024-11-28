@@ -23,6 +23,7 @@ import SubscribedUsers from '../pages/dashboard/SubscribedUsers';
 import DealingDetails from '../pages/dashboard/DealingDetails';
 import PracticeFor from '../pages/dashboard/settings/PracticeFor';
 import PracticeNeed from '../pages/dashboard/settings/PracticeNeed';
+import CouponManagement from '../pages/dashboard/settings/CouponMangement';
 
 const router = createBrowserRouter([
     {
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
 
             //    for settings section
             { path: 'subscriptions', element: <SubscriptionPackages /> },
+            { path: 'coupon-management', element: <CouponManagement /> },
             { path: 'make-admin', element: <MakeAdmin /> },
             { path: 'terms', element: <TermsCondition /> },
             { path: 'agreement', element: <UserAgreement /> },

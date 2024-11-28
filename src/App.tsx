@@ -13,7 +13,14 @@ function App() {
                         Input: {
                             borderRadius: 40,
                         },
+                        InputNumber: {
+                            borderRadius: 40,
+                            lineHeight: 1,
+                        },
                         Select: {
+                            borderRadius: 40,
+                        },
+                        DatePicker: {
                             borderRadius: 40,
                         },
                     },

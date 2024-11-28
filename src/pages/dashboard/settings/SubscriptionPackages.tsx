@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Table, Form, Input, Button, Modal, Select, notification, Tooltip } from 'antd';
+import { Table, Form, Input, Button, Modal, Select, notification, Tooltip, Popconfirm } from 'antd';
 import {
     useCreateSubscriptionMutation,
+    useDeleteSubscriptionMutation,
     useGetSubscriptionQuery,
     useUpdateSubscriptionMutation,
 } from '../../../redux/features/subcription/subscriptionApi';
@@ -20,6 +21,7 @@ const { Option } = Select;
 const SubscriptionPackages: React.FC = () => {
     const [createSubscription] = useCreateSubscriptionMutation();
     const [updateSubscription] = useUpdateSubscriptionMutation();
+    const [deleteSubscription] = useDeleteSubscriptionMutation();
     const { data: subscriptions } = useGetSubscriptionQuery([]);
     const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false);
@@ -103,6 +105,21 @@ const SubscriptionPackages: React.FC = () => {
         form.resetFields();
     };
 
+    const handleDelete = async (id: string) => {
+        try {
+            const res = await deleteSubscription(id).unwrap();
+            if (res.success) {
+                notification.success({
+                    message: res.message,
+                });
+            }
+        } catch (error: any) {
+            notification.error({
+                message: 'Error',
+                description: error.data.message || 'Error occurred while deleting package',
+            });
+        }
+    };
     const columns = [
         {
             title: 'Package Name',
@@ -146,14 +163,26 @@ const SubscriptionPackages: React.FC = () => {
         {
             title: 'Action',
             key: 'action',
-            render: (_text: any, pkg: SubscriptionPackage) => <Button onClick={() => openModal(pkg)}>Edit</Button>,
+            render: (_text: any, pkg: SubscriptionPackage) => (
+                <div className="flex items-center gap-3">
+                    <Button onClick={() => openModal(pkg)}>Edit</Button>
+                    <Popconfirm
+                        title="Are you sure you want to delete this package?"
+                        onConfirm={() => handleDelete(pkg._id)} // Function to delete the package
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button danger>Delete</Button>
+                    </Popconfirm>
+                </div>
+            ),
         },
     ];
 
     return (
         <div>
-            <div className="flex justify-between items-center my-5">
-                <h3 className="text-3xl text-primary font-semibold">Subscription Packages</h3>
+            <div className="flex items-center justify-between my-5">
+                <h3 className="text-3xl font-semibold text-primary">Subscription Packages</h3>
                 <Button type="primary" onClick={() => openModal(null)} style={{ marginBottom: 20, height: 42 }}>
                     Add Package
                 </Button>

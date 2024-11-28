@@ -22,7 +22,7 @@ const HeaderDashboard = () => {
     useGetNotificationQuery([]);
 
     useEffect(() => {
-        const socket = connectSocket('http://192.168.10.15:3000');
+        const socket = connectSocket('http://195.35.6.13:5000');
 
         socket.on(`new_notification::${user?.id.toString()}`, (newData) => {
             console.log(newData);

@@ -9,6 +9,7 @@ import {
     InputNumber,
     notification,
     Popconfirm,
+    Select,
     Table,
 } from 'antd';
 import { useState } from 'react';
@@ -88,6 +89,13 @@ const CouponManagement = () => {
             render: (max_redemptions: number) => <p>{max_redemptions}</p>,
         },
         {
+            title: 'Coupon Type',
+            dataIndex: 'usageInterval',
+            key: 'usageInterval',
+            render: (text: string) => <span>{text === 'once' ? 'Once' : text === 'forever' ? 'Forever' : 'N/A'}</span>,
+        },
+
+        {
             title: 'Valid Until',
             dataIndex: 'redeem_by',
             key: 'redeem_by',
@@ -154,6 +162,23 @@ const CouponManagement = () => {
                         e.target.value = value; // This will dynamically update the input field
                     }}
                 />
+            </Form.Item>
+
+            {/* Coupon Type */}
+            <Form.Item
+                label="Coupon Type"
+                name="usageInterval"
+                rules={[{ required: true, message: 'Please select the coupon type!' }]}
+            >
+                <Select
+                    style={{
+                        height: 42,
+                    }}
+                    placeholder="Select coupon type"
+                >
+                    <Select.Option value="once">Once</Select.Option>
+                    <Select.Option value="forever">Forever</Select.Option>
+                </Select>
             </Form.Item>
 
             {/* Percent Off */}
